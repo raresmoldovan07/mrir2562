@@ -24,17 +24,13 @@ import java.util.ResourceBundle;
 import static inventory.controller.MainScreenController.getModifyProductIndex;
 
 
-public class ModifyProductController implements Initializable, Controller {
+public class ModifyProductController extends BaseController implements Initializable {
     
     // Declare fields
-    private Stage stage;
-    private Parent scene;
     private ObservableList<Part> addParts = FXCollections.observableArrayList();
     private String errorMessage = new String();
     private int productId;
     private int productIndex = getModifyProductIndex();
-
-    private InventoryService service;
 
     @FXML
     private TextField minTxt;
@@ -89,6 +85,7 @@ public class ModifyProductController implements Initializable, Controller {
 
     public ModifyProductController(){}
 
+    @Override
     public void setService(InventoryService service){
         this.service=service;
         fillWithData();
@@ -124,25 +121,6 @@ public class ModifyProductController implements Initializable, Controller {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-    }
-
-
-    /**
-     * Method to add to button handler to switch to scene passed as source
-     * @param event
-     * @param source
-     * @throws IOException
-     */
-    @FXML
-    private void displayScene(ActionEvent event, String source) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        FXMLLoader loader= new FXMLLoader(getClass().getResource(source));
-        //scene = FXMLLoader.load(getClass().getResource(source));
-        scene = loader.load();
-        Controller ctrl=loader.getController();
-        ctrl.setService(service);
-        stage.setScene(new Scene(scene));
-        stage.show();
     }
     
     /**

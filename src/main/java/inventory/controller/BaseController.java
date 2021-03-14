@@ -16,7 +16,7 @@ public abstract class BaseController implements Controller {
     private Stage stage;
     private Parent scene;
 
-    private InventoryService service;
+    protected InventoryService service;
 
     /**
      * Method to add to button handler to switch to scene passed as source
@@ -25,7 +25,7 @@ public abstract class BaseController implements Controller {
      * @throws IOException
      */
     @FXML
-    private void displayScene(ActionEvent event, String source) throws IOException {
+    protected void displayScene(ActionEvent event, String source) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         FXMLLoader loader= new FXMLLoader(getClass().getResource(source));
         scene = loader.load();

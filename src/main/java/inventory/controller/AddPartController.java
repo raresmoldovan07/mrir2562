@@ -18,15 +18,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class AddPartController implements Initializable, Controller {
+public class AddPartController extends BaseController implements Initializable {
     
     // Declare fields
-    private Stage stage;
-    private Parent scene;
     private boolean isOutsourced = true;
     private String errorMessage = "";
-
-    private InventoryService service;
     
     @FXML
     private RadioButton inhouseRBtn;
@@ -60,7 +56,6 @@ public class AddPartController implements Initializable, Controller {
 
     @Override
     public void setService(InventoryService service){
-
         this.service=service;
     }
 
@@ -70,22 +65,6 @@ public class AddPartController implements Initializable, Controller {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         outsourcedRBtn.setSelected(true);
-    }
-    /**
-     * Method to add to button handler to switch to scene passed as source
-     * @param event
-     * @param source
-     * @throws IOException
-     */
-    @FXML
-    private void displayScene(ActionEvent event, String source) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        FXMLLoader loader= new FXMLLoader(getClass().getResource(source));
-        scene = loader.load();
-        Controller ctrl=loader.getController();
-        ctrl.setService(service);
-        stage.setScene(new Scene(scene));
-        stage.show();
     }
 
     /**

@@ -35,7 +35,7 @@ public class InventoryRepository {
 
 	public void readParts(){
 		ObservableList<Part> listP = FXCollections.observableArrayList();
-		
+
 		File file = this.getFile();
 		if(file == null) {
 			return;
