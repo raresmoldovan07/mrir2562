@@ -7,14 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,8 +22,6 @@ public class AddProductController extends BaseController implements Initializabl
     
     // Declare fields
     private ObservableList<Part> addParts = FXCollections.observableArrayList();
-    private String errorMessage = new String();
-    private int productId;
     
     @FXML
     private TextField minTxt;
@@ -80,8 +74,6 @@ public class AddProductController extends BaseController implements Initializabl
     @FXML
     private TableColumn<Part, Integer> deleteProductPriceCol;
 
-    public AddProductController(){}
-
     @Override
     public void setService(InventoryService service){
         this.service=service;
@@ -128,7 +120,7 @@ public class AddProductController extends BaseController implements Initializabl
         alert.setContentText("Are you sure you want to delete part " + part.getName() + " from parts?");
         Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             System.out.println("Part deleted.");
             addParts.remove(part);
         } else {
@@ -150,7 +142,7 @@ public class AddProductController extends BaseController implements Initializabl
         alert.setHeaderText("Confirm Cancelation");
         alert.setContentText("Are you sure you want to cancel adding product?");
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == ButtonType.OK) {
+        if(result.isPresent() && result.get() == ButtonType.OK) {
             System.out.println("Ok selected. Product addition canceled.");
             displayScene(event, "/fxml/MainScreen.fxml");
         } else {
@@ -183,7 +175,7 @@ public class AddProductController extends BaseController implements Initializabl
         String inStock = inventoryTxt.getText();
         String min = minTxt.getText();
         String max = maxTxt.getText();
-        errorMessage = "";
+        String errorMessage = "";
         
         try {
             errorMessage = Product.isValidProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts, errorMessage);

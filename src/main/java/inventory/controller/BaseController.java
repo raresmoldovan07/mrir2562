@@ -13,9 +13,6 @@ import java.io.IOException;
 
 public abstract class BaseController implements Controller {
 
-    private Stage stage;
-    private Parent scene;
-
     protected InventoryService service;
 
     /**
@@ -26,9 +23,9 @@ public abstract class BaseController implements Controller {
      */
     @FXML
     protected void displayScene(ActionEvent event, String source) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         FXMLLoader loader= new FXMLLoader(getClass().getResource(source));
-        scene = loader.load();
+        Parent scene = loader.load();
         Controller ctrl=loader.getController();
         ctrl.setService(service);
         stage.setScene(new Scene(scene));
