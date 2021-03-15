@@ -58,7 +58,7 @@ public class Product {
     
     // Setters
     public void setAssociatedParts(ObservableList<Part> associatedParts) {
-        associatedParts = associatedParts;
+        this.associatedParts = associatedParts;
     }
 
     public void setProductId(int productId) {

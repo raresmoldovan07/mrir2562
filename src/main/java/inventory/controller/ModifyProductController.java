@@ -108,6 +108,9 @@ public class ModifyProductController implements Initializable, Controller {
         addProductPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         // Populate modify product form
+        if (productIndex < 0) {
+            return;
+        }
         Product product = productService.getAllProducts().get(productIndex);
 
         productId = productService.getAllProducts().get(productIndex).getProductId();

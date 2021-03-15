@@ -78,6 +78,9 @@ public class ModifyPartController implements Initializable, Controller {
     }
 
     private void fillWithData(){
+        if (partIndex < 0) {
+            return;
+        }
         Part part = partService.getAllParts().get(partIndex);
 
         partId = partService.getAllParts().get(partIndex).getPartId();
