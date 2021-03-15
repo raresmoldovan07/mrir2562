@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 import static inventory.controller.MainScreenController.getModifyPartIndex;
 
 
-public class ModifyPartController implements Initializable, Controller {
+public class ModifyPartController extends BaseController implements Initializable {
     
     // Declare field
     private Stage stage;
@@ -112,24 +112,6 @@ public class ModifyPartController implements Initializable, Controller {
     public void initialize(URL url, ResourceBundle rb) {
 
     }
-
-    /**
-     * Method to add to button handler to switch to scene passed as source
-     * @param event
-     * @param source
-     * @throws IOException
-     */
-    @FXML
-    private void displayScene(ActionEvent event, String source) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        FXMLLoader loader= new FXMLLoader(getClass().getResource(source));
-        //scene = FXMLLoader.load(getClass().getResource(source));
-        scene = loader.load();
-        Controller ctrl=loader.getController();
-        ctrl.setService(partService, productService);
-        stage.setScene(new Scene(scene));
-        stage.show();
-    }
     
     /**
      * If in-house radio button is selected set isOutsourced boolean
@@ -201,7 +183,7 @@ public class ModifyPartController implements Initializable, Controller {
                 alert.setContentText(errorMessage);
                 alert.showAndWait();
             } else {
-                if(isOutsourced == true) {
+                if(isOutsourced) {
                     partService.updateOutsourcedPart(partIndex, Integer.parseInt(partId), name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), partDynamicValue);
                 } else {
                     partService.updateInhousePart(partIndex, Integer.parseInt(partId), name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue));
