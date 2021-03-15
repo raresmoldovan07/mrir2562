@@ -17,9 +17,6 @@ import java.util.ResourceBundle;
 
 public class AddPartController extends BaseController implements Initializable {
     
-    // Declare fields
-    private Stage stage;
-    private Parent scene;
     private boolean isOutsourced = true;
     private int partId;
 
