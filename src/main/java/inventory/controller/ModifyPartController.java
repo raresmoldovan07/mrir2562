@@ -4,7 +4,8 @@ package inventory.controller;
 import inventory.model.InhousePart;
 import inventory.model.OutsourcedPart;
 import inventory.model.Part;
-import inventory.service.InventoryService;
+import inventory.service.PartService;
+import inventory.service.ProductService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +34,8 @@ public class ModifyPartController implements Initializable, Controller {
     private boolean isOutsourced;
     private int partId;
 
-    private InventoryService service;
+    private PartService partService;
+    private ProductService productService;
     
     @FXML
     private RadioButton inhouseRBtn;
@@ -67,15 +69,17 @@ public class ModifyPartController implements Initializable, Controller {
 
     public ModifyPartController(){}
 
-    public void setService(InventoryService service){
-        this.service=service;
+    @Override
+    public void setService(PartService service, ProductService productService){
+        this.partService =service;
+        this.productService = productService;
         fillWithData();
     }
 
     private void fillWithData(){
-        Part part = service.getAllParts().get(partIndex);
+        Part part = partService.getAllParts().get(partIndex);
 
-        partId = service.getAllParts().get(partIndex).getPartId();
+        partId = partService.getAllParts().get(partIndex).getPartId();
         partIdTxt.setText(Integer.toString(part.getPartId()));
         nameTxt.setText(part.getName());
         inventoryTxt.setText(Integer.toString(part.getInStock()));
@@ -84,12 +88,12 @@ public class ModifyPartController implements Initializable, Controller {
         minTxt.setText(Integer.toString(part.getMin()));
 
         if(part instanceof InhousePart) {
-            modifyPartDynamicTxt.setText(Integer.toString(((InhousePart) service.getAllParts().get(partIndex)).getMachineId()));
+            modifyPartDynamicTxt.setText(Integer.toString(((InhousePart) partService.getAllParts().get(partIndex)).getMachineId()));
             modifyPartDynamicLbl.setText("Machine ID");
             inhouseRBtn.setSelected(true);
             isOutsourced = false;
         } else {
-            modifyPartDynamicTxt.setText(((OutsourcedPart) service.getAllParts().get(partIndex)).getCompanyName());
+            modifyPartDynamicTxt.setText(((OutsourcedPart) partService.getAllParts().get(partIndex)).getCompanyName());
             modifyPartDynamicLbl.setText("Company Name");
             outsourcedRBtn.setSelected(true);
             isOutsourced = true;
@@ -118,7 +122,7 @@ public class ModifyPartController implements Initializable, Controller {
         //scene = FXMLLoader.load(getClass().getResource(source));
         scene = loader.load();
         Controller ctrl=loader.getController();
-        ctrl.setService(service);
+        ctrl.setService(partService, productService);
         stage.setScene(new Scene(scene));
         stage.show();
     }
@@ -194,9 +198,9 @@ public class ModifyPartController implements Initializable, Controller {
                 alert.showAndWait();
             } else {
                 if(isOutsourced == true) {
-                    service.updateOutsourcedPart(partIndex, Integer.parseInt(partId), name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), partDynamicValue);
+                    partService.updateOutsourcedPart(partIndex, Integer.parseInt(partId), name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), partDynamicValue);
                 } else {
-                    service.updateInhousePart(partIndex, Integer.parseInt(partId), name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue));
+                    partService.updateInhousePart(partIndex, Integer.parseInt(partId), name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue));
                 }
                 displayScene(event, "/fxml/MainScreen.fxml");
             }

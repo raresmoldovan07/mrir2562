@@ -2,7 +2,8 @@ package inventory.controller;
 
 import inventory.model.Part;
 import inventory.model.Product;
-import inventory.service.InventoryService;
+import inventory.service.PartService;
+import inventory.service.ProductService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,7 +35,8 @@ public class ModifyProductController implements Initializable, Controller {
     private int productId;
     private int productIndex = getModifyProductIndex();
 
-    private InventoryService service;
+    private PartService partService;
+    private ProductService productService;
 
     @FXML
     private TextField minTxt;
@@ -89,14 +91,15 @@ public class ModifyProductController implements Initializable, Controller {
 
     public ModifyProductController(){}
 
-    public void setService(InventoryService service){
-        this.service=service;
+    public void setService(PartService service, ProductService productService){
+        this.partService = service;
+        this.productService = productService;
         fillWithData();
     }
 
     private void fillWithData(){
         // Populate add product table view
-        addProductTableView.setItems(service.getAllParts());
+        addProductTableView.setItems(partService.getAllParts());
 
         addProductIdCol.setCellValueFactory(new PropertyValueFactory<>("partId"));
         addProductNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -104,9 +107,9 @@ public class ModifyProductController implements Initializable, Controller {
         addProductPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         // Populate modify product form
-        Product product = service.getAllProducts().get(productIndex);
+        Product product = productService.getAllProducts().get(productIndex);
 
-        productId = service.getAllProducts().get(productIndex).getProductId();
+        productId = productService.getAllProducts().get(productIndex).getProductId();
         productIdTxt.setText(Integer.toString(product.getProductId()));
         nameTxt.setText(product.getName());
         inventoryTxt.setText(Integer.toString(product.getInStock()));
@@ -118,6 +121,7 @@ public class ModifyProductController implements Initializable, Controller {
         addParts = product.getAssociatedParts();
         updateDeleteProductTableView();
     }
+    
     /**
      * Initializes the controller class.
      */
@@ -125,8 +129,7 @@ public class ModifyProductController implements Initializable, Controller {
     public void initialize(URL url, ResourceBundle rb) {
 
     }
-
-
+    
     /**
      * Method to add to button handler to switch to scene passed as source
      * @param event
@@ -140,7 +143,7 @@ public class ModifyProductController implements Initializable, Controller {
         //scene = FXMLLoader.load(getClass().getResource(source));
         scene = loader.load();
         Controller ctrl=loader.getController();
-        ctrl.setService(service);
+        ctrl.setService(partService, productService);
         stage.setScene(new Scene(scene));
         stage.show();
     }
@@ -238,7 +241,7 @@ public class ModifyProductController implements Initializable, Controller {
                 alert.setContentText(errorMessage);
                 alert.showAndWait();
             } else {
-                service.updateProduct(productIndex, productId, name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts);
+                productService.updateProduct(productIndex, productId, name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts);
                 displayScene(event, "/fxml/MainScreen.fxml");
             }
         } catch (NumberFormatException e) {
@@ -258,7 +261,7 @@ public class ModifyProductController implements Initializable, Controller {
     @FXML
     void handleSearchProduct(ActionEvent event) {
         String x = productSearchTxt.getText();
-        addProductTableView.getSelectionModel().select(service.lookupPart(x));
+        addProductTableView.getSelectionModel().select(partService.lookupPart(x));
     }
 
 
