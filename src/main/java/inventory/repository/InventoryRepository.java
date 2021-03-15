@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.StringTokenizer;
 
 public class InventoryRepository {
@@ -19,22 +21,35 @@ public class InventoryRepository {
 		readProducts();
 	}
 
-	public void readParts(){
-		ClassLoader classLoader = InventoryRepository.class.getClassLoader();
-		File file = new File(classLoader.getResource(filename).getFile());
-		ObservableList<Part> listP = FXCollections.observableArrayList();
-		BufferedReader br = null;
+	private File getFile() {
 		try {
-			br = new BufferedReader(new FileReader(file));
+			URL resource = getClass().getClassLoader().getResource(filename);
+			if(resource != null) {
+				return new File(resource.toURI());
+			}
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void readParts(){
+		ObservableList<Part> listP = FXCollections.observableArrayList();
+
+		File file = this.getFile();
+		if(file == null) {
+			return;
+		}
+		try (
+				FileReader fileReader = new FileReader(file);
+				BufferedReader bufferedReader = new BufferedReader(fileReader);
+				) {
 			String line = null;
-			while((line=br.readLine())!=null){
+			while((line=bufferedReader.readLine())!=null){
 				Part part=getPartFromString(line);
 				if (part!=null)
 					listP.add(part);
 			}
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -72,22 +87,22 @@ public class InventoryRepository {
 	}
 
 	public void readProducts(){
-		ClassLoader classLoader = InventoryRepository.class.getClassLoader();
-		File file = new File(classLoader.getResource(filename).getFile());
-
 		ObservableList<Product> listP = FXCollections.observableArrayList();
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(file));
+
+		File file = this.getFile();
+		if(file == null) {
+			return;
+		}
+		try (
+				FileReader fileReader = new FileReader(file);
+				BufferedReader bufferedReader = new BufferedReader(fileReader);
+		) {
 			String line = null;
-			while((line=br.readLine())!=null){
+			while((line=bufferedReader.readLine())!=null){
 				Product product=getProductFromString(line);
 				if (product!=null)
 					listP.add(product);
 			}
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

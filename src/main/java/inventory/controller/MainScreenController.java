@@ -22,11 +22,9 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class MainScreenController implements Initializable,Controller {
+public class MainScreenController extends BaseController implements Initializable {
     
      // Declare fields
-    private Stage stage;
-    private Parent scene;
     private static Part modifyPart;
     private static Product modifyProduct;
     private static int modifyPartIndex;
@@ -40,8 +38,6 @@ public class MainScreenController implements Initializable,Controller {
     public static int getModifyProductIndex() {
         return modifyProductIndex;
     }
-
-    private InventoryService service;
 
     @FXML
     private TableView<Part> partsTableView;
@@ -82,6 +78,7 @@ public class MainScreenController implements Initializable,Controller {
 
     public MainScreenController(){}
 
+    @Override
     public void setService(InventoryService service){
         this.service=service;
         partsTableView.setItems(service.getAllParts());
@@ -105,23 +102,6 @@ public class MainScreenController implements Initializable,Controller {
         productsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         productsInventoryCol.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         productsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-    }
-
-    /**
-     * Method to add to button handler to switch to scene passed as source
-     * @param event
-     * @param source
-     * @throws IOException
-     */
-    private void displayScene(ActionEvent event, String source) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        FXMLLoader loader= new FXMLLoader(getClass().getResource(source));
-        //scene = FXMLLoader.load(getClass().getResource(source));
-        scene = loader.load();
-        Controller ctrl=loader.getController();
-        ctrl.setService(service);
-        stage.setScene(new Scene(scene));
-        stage.show();
     }
 
     /**

@@ -13,10 +13,7 @@ import java.io.IOException;
 
 public abstract class BaseController implements Controller {
 
-    private Stage stage;
-    private Parent scene;
-
-    private InventoryService service;
+    protected InventoryService service;
 
     /**
      * Method to add to button handler to switch to scene passed as source
@@ -25,10 +22,10 @@ public abstract class BaseController implements Controller {
      * @throws IOException
      */
     @FXML
-    private void displayScene(ActionEvent event, String source) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+    protected void displayScene(ActionEvent event, String source) throws IOException {
+        Stage stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         FXMLLoader loader= new FXMLLoader(getClass().getResource(source));
-        scene = loader.load();
+        Parent scene = loader.load();
         Controller ctrl=loader.getController();
         ctrl.setService(service);
         stage.setScene(new Scene(scene));

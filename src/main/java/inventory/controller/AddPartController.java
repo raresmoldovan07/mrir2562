@@ -4,13 +4,9 @@ import inventory.model.Part;
 import inventory.service.InventoryService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,16 +14,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class AddPartController implements Initializable, Controller {
+public class AddPartController extends BaseController implements Initializable {
     
     // Declare fields
-    private Stage stage;
-    private Parent scene;
     private boolean isOutsourced = true;
-    private String errorMessage = new String();
-    private int partId;
-
-    private InventoryService service;
+    private String errorMessage = "";
     
     @FXML
     private RadioButton inhouseRBtn;
@@ -59,11 +50,8 @@ public class AddPartController implements Initializable, Controller {
     @FXML
     private TextField minTxt;
 
-    public AddPartController(){}
-
     @Override
     public void setService(InventoryService service){
-
         this.service=service;
     }
 
@@ -73,23 +61,6 @@ public class AddPartController implements Initializable, Controller {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         outsourcedRBtn.setSelected(true);
-    }
-    /**
-     * Method to add to button handler to switch to scene passed as source
-     * @param event
-     * @param source
-     * @throws IOException
-     */
-    @FXML
-    private void displayScene(ActionEvent event, String source) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        FXMLLoader loader= new FXMLLoader(getClass().getResource(source));
-        //scene = FXMLLoader.load(getClass().getResource(source));
-        scene = loader.load();
-        Controller ctrl=loader.getController();
-        ctrl.setService(service);
-        stage.setScene(new Scene(scene));
-        stage.show();
     }
 
     /**
@@ -106,7 +77,7 @@ public class AddPartController implements Initializable, Controller {
         alert.setHeaderText("Confirm Cancelation");
         alert.setContentText("Are you sure you want to cancel adding part?");
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == ButtonType.OK) {
+        if(result.isPresent() && result.get() == ButtonType.OK) {
             System.out.println("Ok selected. Part addition canceled.");
             displayScene(event, "/fxml/MainScreen.fxml");
         } else {
@@ -161,7 +132,7 @@ public class AddPartController implements Initializable, Controller {
                 alert.setContentText(errorMessage);
                 alert.showAndWait();
             } else {
-               if(isOutsourced == true) {
+               if(isOutsourced) {
                     service.addOutsourcePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), partDynamicValue);
                 } else {
                     service.addInhousePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue));
