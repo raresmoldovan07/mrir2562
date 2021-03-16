@@ -10,13 +10,13 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.StringTokenizer;
 
-public class InventoryRepository {
+public class PartRepository {
 
 	private static String filename = "data/items.txt";
 	private Inventory inventory;
 
-	public InventoryRepository(){
-		this.inventory=new Inventory();
+	public PartRepository(Inventory inventory) {
+		this.inventory = inventory;
 		readParts();
 		readProducts();
 	}
@@ -140,7 +140,7 @@ public class InventoryRepository {
 
 	public void writeAll() {
 
-		ClassLoader classLoader = InventoryRepository.class.getClassLoader();
+		ClassLoader classLoader = PartRepository.class.getClassLoader();
 		File file = new File(classLoader.getResource(filename).getFile());
 
 		BufferedWriter bw = null;
@@ -179,33 +179,16 @@ public class InventoryRepository {
 		writeAll();
 	}
 
-	public void addProduct(Product product){
-		inventory.addProduct(product);
-		writeAll();
-	}
-
 	public int getAutoPartId(){
 		return inventory.getAutoPartId();
-	}
-
-	public int getAutoProductId(){
-		return inventory.getAutoProductId();
 	}
 
 	public ObservableList<Part> getAllParts(){
 		return inventory.getAllParts();
 	}
 
-	public ObservableList<Product> getAllProducts(){
-		return inventory.getProducts();
-	}
-
 	public Part lookupPart (String search){
 		return inventory.lookupPart(search);
-	}
-
-	public Product lookupProduct (String search){
-		return inventory.lookupProduct(search);
 	}
 
 	public void updatePart(int partIndex, Part part){
@@ -213,18 +196,8 @@ public class InventoryRepository {
 		writeAll();
 	}
 
-	public void updateProduct(int productIndex, Product product){
-		inventory.updateProduct(productIndex, product);
-		writeAll();
-	}
-
 	public void deletePart(Part part){
 		inventory.deletePart(part);
-		writeAll();
-	}
-
-	public void deleteProduct(Product product){
-		inventory.removeProduct(product);
 		writeAll();
 	}
 

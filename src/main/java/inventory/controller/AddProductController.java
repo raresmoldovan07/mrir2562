@@ -2,7 +2,9 @@ package inventory.controller;
 
 import inventory.model.Part;
 import inventory.model.Product;
-import inventory.service.InventoryService;
+import inventory.service.PartService;
+import inventory.service.ProductService;
+import inventory.validator.Validator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +24,9 @@ public class AddProductController extends BaseController implements Initializabl
     
     // Declare fields
     private ObservableList<Part> addParts = FXCollections.observableArrayList();
+    
+    private PartService partService;
+    private ProductService productService;
     
     @FXML
     private TextField minTxt;
@@ -74,11 +79,10 @@ public class AddProductController extends BaseController implements Initializabl
     @FXML
     private TableColumn<Part, Integer> deleteProductPriceCol;
 
-    @Override
-    public void setService(InventoryService service){
-        this.service=service;
+    public void setService(PartService service, ProductService productService){
+        this.partService =service;
+        this.productService = productService;
         addProductTableView.setItems(service.getAllParts());
-
     }
 
     /**
@@ -178,7 +182,7 @@ public class AddProductController extends BaseController implements Initializabl
         String errorMessage = "";
         
         try {
-            errorMessage = Product.isValidProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts, errorMessage);
+            errorMessage = Validator.isValidProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts, errorMessage);
             if(errorMessage.length() > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error Adding Part!");
@@ -186,7 +190,7 @@ public class AddProductController extends BaseController implements Initializabl
                 alert.setContentText(errorMessage);
                 alert.showAndWait();
             } else {
-                service.addProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts);
+                productService.addProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts);
                 displayScene(event, "/fxml/MainScreen.fxml");
             }
         } catch (NumberFormatException e) {
@@ -207,7 +211,7 @@ public class AddProductController extends BaseController implements Initializabl
     @FXML
     void handleSearchProduct(ActionEvent event) {
         String x = productSearchTxt.getText();
-        addProductTableView.getSelectionModel().select(service.lookupPart(x));
+        addProductTableView.getSelectionModel().select(partService.lookupPart(x));
     }
 
 

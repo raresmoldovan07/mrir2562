@@ -2,7 +2,9 @@ package inventory.controller;
 
 import inventory.model.Part;
 import inventory.model.Product;
-import inventory.service.InventoryService;
+import inventory.service.PartService;
+import inventory.service.ProductService;
+import inventory.validator.Validator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,6 +33,9 @@ public class ModifyProductController extends BaseController implements Initializ
     private String errorMessage = new String();
     private int productId;
     private int productIndex = getModifyProductIndex();
+
+    private PartService partService;
+    private ProductService productService;
 
     @FXML
     private TextField minTxt;
@@ -86,14 +91,15 @@ public class ModifyProductController extends BaseController implements Initializ
     public ModifyProductController(){}
 
     @Override
-    public void setService(InventoryService service){
-        this.service=service;
+    public void setService(PartService service, ProductService productService){
+        this.partService = service;
+        this.productService = productService;
         fillWithData();
     }
 
     private void fillWithData(){
         // Populate add product table view
-        addProductTableView.setItems(service.getAllParts());
+        addProductTableView.setItems(partService.getAllParts());
 
         addProductIdCol.setCellValueFactory(new PropertyValueFactory<>("partId"));
         addProductNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -101,9 +107,12 @@ public class ModifyProductController extends BaseController implements Initializ
         addProductPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         // Populate modify product form
-        Product product = service.getAllProducts().get(productIndex);
+        if (productIndex < 0) {
+            return;
+        }
+        Product product = productService.getAllProducts().get(productIndex);
 
-        productId = service.getAllProducts().get(productIndex).getProductId();
+        productId = productService.getAllProducts().get(productIndex).getProductId();
         productIdTxt.setText(Integer.toString(product.getProductId()));
         nameTxt.setText(product.getName());
         inventoryTxt.setText(Integer.toString(product.getInStock()));
@@ -115,6 +124,7 @@ public class ModifyProductController extends BaseController implements Initializ
         addParts = product.getAssociatedParts();
         updateDeleteProductTableView();
     }
+    
     /**
      * Initializes the controller class.
      */
@@ -208,7 +218,7 @@ public class ModifyProductController extends BaseController implements Initializ
         errorMessage = "";
         
         try {
-            errorMessage = Product.isValidProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts, errorMessage);
+            errorMessage = Validator.isValidProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts, errorMessage);
             if(errorMessage.length() > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error Adding Part!");
@@ -216,7 +226,7 @@ public class ModifyProductController extends BaseController implements Initializ
                 alert.setContentText(errorMessage);
                 alert.showAndWait();
             } else {
-                service.updateProduct(productIndex, productId, name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts);
+                productService.updateProduct(productIndex, productId, name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts);
                 displayScene(event, "/fxml/MainScreen.fxml");
             }
         } catch (NumberFormatException e) {
@@ -236,7 +246,7 @@ public class ModifyProductController extends BaseController implements Initializ
     @FXML
     void handleSearchProduct(ActionEvent event) {
         String x = productSearchTxt.getText();
-        addProductTableView.getSelectionModel().select(service.lookupPart(x));
+        addProductTableView.getSelectionModel().select(partService.lookupPart(x));
     }
 
 

@@ -1,6 +1,7 @@
 package inventory.controller;
 
-import inventory.service.InventoryService;
+import inventory.service.PartService;
+import inventory.service.ProductService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +14,11 @@ import java.io.IOException;
 
 public abstract class BaseController implements Controller {
 
-    protected InventoryService service;
+    private Stage stage;
+    private Parent scene;
+
+    private PartService partService;
+    private ProductService productService;
 
     /**
      * Method to add to button handler to switch to scene passed as source
@@ -27,7 +32,7 @@ public abstract class BaseController implements Controller {
         FXMLLoader loader= new FXMLLoader(getClass().getResource(source));
         Parent scene = loader.load();
         Controller ctrl=loader.getController();
-        ctrl.setService(service);
+        ctrl.setService(partService, productService);
         stage.setScene(new Scene(scene));
         stage.show();
     }

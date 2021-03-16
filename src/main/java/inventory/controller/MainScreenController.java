@@ -3,7 +3,8 @@ package inventory.controller;
 
 import inventory.model.Part;
 import inventory.model.Product;
-import inventory.service.InventoryService;
+import inventory.service.PartService;
+import inventory.service.ProductService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,6 +40,9 @@ public class MainScreenController extends BaseController implements Initializabl
         return modifyProductIndex;
     }
 
+    private PartService partService;
+    private ProductService productService;
+
     @FXML
     private TableView<Part> partsTableView;
 
@@ -53,8 +57,7 @@ public class MainScreenController extends BaseController implements Initializabl
 
     @FXML
     private TableColumn<Part, Double> partsPriceCol;
-
-
+    
     @FXML
     private TableView<Product> productsTableView;
 
@@ -78,14 +81,13 @@ public class MainScreenController extends BaseController implements Initializabl
 
     public MainScreenController(){}
 
-    @Override
-    public void setService(InventoryService service){
-        this.service=service;
+    public void setService(PartService service, ProductService productService){
+        this.partService =service;
+        this.productService = productService;
         partsTableView.setItems(service.getAllParts());
-        productsTableView.setItems(service.getAllProducts());
+        productsTableView.setItems(productService.getAllProducts());
     }
-
-
+    
     /**
      * Initializes the controller class and populate table views.
      */
@@ -121,7 +123,7 @@ public class MainScreenController extends BaseController implements Initializabl
 
         if (result.get() == ButtonType.OK) {
             System.out.println("Part deleted.");
-            service.deletePart(part);
+            partService.deletePart(part);
         } else {
             System.out.println("Canceled part deletion.");
         }
@@ -143,7 +145,7 @@ public class MainScreenController extends BaseController implements Initializabl
         Optional<ButtonType> result = alert.showAndWait();
         
         if (result.get() == ButtonType.OK) {
-            service.deleteProduct(product);
+            productService.deleteProduct(product);
             System.out.println("Product " + product.getName() + " was removed.");
         } else {
             System.out.println("Product " + product.getName() + " was not removed.");
@@ -179,7 +181,7 @@ public class MainScreenController extends BaseController implements Initializabl
     @FXML
     void handleModifyPart(ActionEvent event) throws IOException {
         modifyPart = partsTableView.getSelectionModel().getSelectedItem();
-        modifyPartIndex = service.getAllParts().indexOf(modifyPart);
+        modifyPartIndex = partService.getAllParts().indexOf(modifyPart);
         
         displayScene(event, "/fxml/ModifyPart.fxml");
     }
@@ -192,7 +194,7 @@ public class MainScreenController extends BaseController implements Initializabl
     @FXML
     void handleModifyProduct(ActionEvent event) throws IOException {
         modifyProduct = productsTableView.getSelectionModel().getSelectedItem();
-        modifyProductIndex = service.getAllProducts().indexOf(modifyProduct);
+        modifyProductIndex = productService.getAllProducts().indexOf(modifyProduct);
         
         displayScene(event, "/fxml/ModifyProduct.fxml");
     }
@@ -224,7 +226,7 @@ public class MainScreenController extends BaseController implements Initializabl
     @FXML
     void handlePartsSearchBtn(ActionEvent event) {
         String x = partsSearchTxt.getText();
-        partsTableView.getSelectionModel().select(service.lookupPart(x));
+        partsTableView.getSelectionModel().select(partService.lookupPart(x));
     }
 
     /**
@@ -234,7 +236,7 @@ public class MainScreenController extends BaseController implements Initializabl
     @FXML
     void handleProductsSearchBtn(ActionEvent event) {
         String x = productsSearchTxt.getText();
-        productsTableView.getSelectionModel().select(service.lookupProduct(x));
+        productsTableView.getSelectionModel().select(productService.lookupProduct(x));
     }
 
 

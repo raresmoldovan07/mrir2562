@@ -1,7 +1,8 @@
 package inventory.controller;
 
-import inventory.model.Part;
-import inventory.service.InventoryService;
+import inventory.service.PartService;
+import inventory.service.ProductService;
+import inventory.validator.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,8 +17,11 @@ import java.util.ResourceBundle;
 
 public class AddPartController extends BaseController implements Initializable {
     
-    // Declare fields
     private boolean isOutsourced = true;
+    private int partId;
+
+    private PartService partService;
+    private ProductService productService;
     private String errorMessage = "";
     
     @FXML
@@ -50,9 +54,12 @@ public class AddPartController extends BaseController implements Initializable {
     @FXML
     private TextField minTxt;
 
+    public AddPartController(){}
+
     @Override
-    public void setService(InventoryService service){
-        this.service=service;
+    public void setService(PartService service, ProductService productService){
+        this.partService =service;
+        this.productService = productService;
     }
 
     /**
@@ -124,7 +131,7 @@ public class AddPartController extends BaseController implements Initializable {
         errorMessage = "";
         
         try {
-            errorMessage = Part.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), errorMessage);
+            errorMessage = Validator.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), errorMessage);
             if(errorMessage.length() > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error Adding Part!");
@@ -133,9 +140,9 @@ public class AddPartController extends BaseController implements Initializable {
                 alert.showAndWait();
             } else {
                if(isOutsourced) {
-                    service.addOutsourcePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), partDynamicValue);
+                    partService.addOutsourcePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), partDynamicValue);
                 } else {
-                    service.addInhousePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue));
+                    partService.addInhousePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue));
                 }
                 displayScene(event, "/fxml/MainScreen.fxml");
             }
