@@ -2,6 +2,7 @@ package inventory.controller;
 
 import inventory.service.PartService;
 import inventory.service.ProductService;
+import inventory.validator.ValidationException;
 import inventory.validator.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,20 +17,20 @@ import java.util.ResourceBundle;
 
 
 public class AddPartController extends BaseController implements Initializable {
-    
+
     private boolean isOutsourced = true;
     private int partId;
 
     private PartService partService;
     private ProductService productService;
     private String errorMessage = "";
-    
+
     @FXML
     private RadioButton inhouseRBtn;
 
     @FXML
     private RadioButton outsourcedRBtn;
-    
+
     @FXML
     private Label addPartDynamicLbl;
 
@@ -44,7 +45,7 @@ public class AddPartController extends BaseController implements Initializable {
 
     @FXML
     private TextField priceTxt;
-    
+
     @FXML
     private TextField addPartDynamicTxt;
 
@@ -54,11 +55,12 @@ public class AddPartController extends BaseController implements Initializable {
     @FXML
     private TextField minTxt;
 
-    public AddPartController(){}
+    public AddPartController() {
+    }
 
     @Override
-    public void setService(PartService service, ProductService productService){
-        this.partService =service;
+    public void setService(PartService service, ProductService productService) {
+        this.partService = service;
         this.productService = productService;
     }
 
@@ -73,6 +75,7 @@ public class AddPartController extends BaseController implements Initializable {
     /**
      * Ask user for confirmation before canceling part addition
      * and switching scene to Main Screen
+     *
      * @param event
      * @throws IOException
      */
@@ -84,7 +87,7 @@ public class AddPartController extends BaseController implements Initializable {
         alert.setHeaderText("Confirm Cancelation");
         alert.setContentText("Are you sure you want to cancel adding part?");
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             System.out.println("Ok selected. Part addition canceled.");
             displayScene(event, "/fxml/MainScreen.fxml");
         } else {
@@ -95,7 +98,8 @@ public class AddPartController extends BaseController implements Initializable {
     /**
      * If in-house radio button is selected set isOutsourced boolean
      * to false and modify dynamic label to Machine ID
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     void handleInhouseRBtn(ActionEvent event) {
@@ -106,7 +110,8 @@ public class AddPartController extends BaseController implements Initializable {
     /**
      * If outsourced radio button is selected set isOutsourced boolean
      * to true and modify dynamic label to Company Name
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     void handleOutsourcedRBtn(ActionEvent event) {
@@ -117,6 +122,7 @@ public class AddPartController extends BaseController implements Initializable {
     /**
      * Validate given part parameters.  If valid, add part to inventory,
      * else give user an error message explaining why the part is invalid.
+     *
      * @param event
      * @throws IOException
      */
@@ -129,30 +135,29 @@ public class AddPartController extends BaseController implements Initializable {
         String max = maxTxt.getText();
         String partDynamicValue = addPartDynamicTxt.getText();
         errorMessage = "";
-        
+
         try {
             errorMessage = Validator.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), errorMessage);
-            if(errorMessage.length() > 0) {
+            if (errorMessage.length() > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error Adding Part!");
                 alert.setHeaderText("Error!");
                 alert.setContentText(errorMessage);
                 alert.showAndWait();
             } else {
-               if(isOutsourced) {
+                if (isOutsourced) {
                     partService.addOutsourcePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), partDynamicValue);
                 } else {
                     partService.addInhousePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue));
                 }
                 displayScene(event, "/fxml/MainScreen.fxml");
             }
-            
-        } catch (NumberFormatException e) {
-            System.out.println("Form contains blank field.");
+
+        } catch (NumberFormatException | ValidationException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Error Adding Part!");
             alert.setHeaderText("Error!");
-            alert.setContentText("Form contains blank field.");
+            alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
     }
