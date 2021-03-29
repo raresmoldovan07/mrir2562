@@ -24,8 +24,8 @@ public class PartService {
      * @param name String, can not be empty
      * @param price double, must be greater than 0.
      * @param inStock int, must be greater than 0.
-     * @param min int, must be less than the Max value and lower than inStock.
-     * @param max int, must be bigger than the min value and bigger than inStock.
+     * @param min int, must be positive, less than the Max value and lower than inStock.
+     * @param max int, must be positive, bigger than the min value and bigger than inStock.
      * @param partDynamicValue String, can not be empty
      */
     public void addOutsourcePart(String name, double price, int inStock, int min, int max, String partDynamicValue) {

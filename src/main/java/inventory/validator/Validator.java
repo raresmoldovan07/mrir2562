@@ -26,6 +26,9 @@ public class Validator {
         if(inStock < 1) {
             errorMessage += "Inventory level must be greater than 0. ";
         }
+        if(min < 0) {
+            errorMessage += "The min value must be positive. ";
+        }
         if(min > max) {
             errorMessage += "The Min value must be less than the Max value. ";
         }
