@@ -23,5 +23,3 @@ i
 9src/main/java/inventory/repository/ProductRepository.java,6\2\62b718e516c3bd8597ee1cc92af4a235fe19c416
 `
 0src/main/java/inventory/service/PartService.java,3\9\39b589a986e7d3b263a7a8875ab9d9a2828385c3
-R
-"src/main/test/PartServiceTest.java,5\5\5516ce619b67f2159593cd692758adae0920fa4f
