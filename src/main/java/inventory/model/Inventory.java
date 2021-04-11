@@ -114,7 +114,10 @@ public class Inventory {
             return null;
         }
         for (Part part : allParts) {
-            if (part.getName().contains(searchItem) || (part.getPartId() + "").equals(searchItem)) {
+            if (part.getName().contains(searchItem)) {
+                return part;
+            }
+            if (String.valueOf(part.getPartId()).equals(searchItem)) {
                 return part;
             }
         }
