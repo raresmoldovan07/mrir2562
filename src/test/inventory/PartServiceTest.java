@@ -1,3 +1,5 @@
+package inventory;
+
 import inventory.model.Inventory;
 import inventory.model.Part;
 import inventory.repository.PartRepository;
