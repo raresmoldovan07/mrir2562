@@ -1,4 +1,4 @@
-package inventory;
+package mrir2562;
 
 import inventory.model.Inventory;
 import inventory.model.Part;
