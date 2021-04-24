@@ -47,6 +47,7 @@ class PartServiceTest {
 
     ///ECP tests:
     @Test
+    @Order(1)
     //ecp valid
     void test_addOutsourcePart_valid_ecp() {
 
@@ -63,6 +64,7 @@ class PartServiceTest {
     }
 
     @Test
+    @Order(2)
         //ecp invalid
     void test_addOutsourcePart_invalidMinStock_ECP() {
         
@@ -127,6 +129,7 @@ class PartServiceTest {
     
     ///BVA tests:
     @Test
+    @Order(3)
     //bva extrema inferioara +1
     void test_addOutsourcePart_valid_bva() {
 
@@ -173,6 +176,7 @@ class PartServiceTest {
     }
     
     @Test
+    @Order(4)
     void addOutsourcePart_invalidInStock_bva() {
 
         double price = 1.0;

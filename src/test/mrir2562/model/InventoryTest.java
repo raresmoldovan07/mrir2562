@@ -1,5 +1,8 @@
-package inventory.model;
+package mrir2562.model;
 
+import inventory.model.InhousePart;
+import inventory.model.Inventory;
+import inventory.model.Part;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
