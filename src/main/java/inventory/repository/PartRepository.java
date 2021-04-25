@@ -16,8 +16,8 @@ public class PartRepository {
 
 	public PartRepository(Inventory inventory) {
 		this.inventory = inventory;
-		readParts();
-		readProducts();
+//		readParts();
+//		readProducts();
 	}
 
 	private File getFile() {

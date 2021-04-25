@@ -11,37 +11,27 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class PartServiceTest {
 
     private static final String partDynamicValue = "Google";
-    
-    static PartService partService;
+
+    private final PartRepository partRepository = new PartRepository(new Inventory());
+    private final PartService partService = new PartService(partRepository);
     
     private String name;
-
-    @BeforeAll
-    static void setUp() {
-        PartRepository partRepository = new PartRepository(new Inventory());
-        partService = new PartService(partRepository);
+    
+    @BeforeEach
+    public void setUpForEach() {
+        name = "Surub";
         while (!partService.getAllParts().isEmpty()) {
             Part p = partService.getAllParts().get(0);
             partService.deletePart(p);
         }
-    }
-    
-    @BeforeEach
-    void setUpForEach() {
-        name = "Surub";
     }
 
     @AfterEach
-    void tearDown() {
+    public void tearDown() {
         while (!partService.getAllParts().isEmpty()) {
             Part p = partService.getAllParts().get(0);
             partService.deletePart(p);
         }
-    }
-
-    @AfterAll
-    static void overAllTearDown() {
-        partService = null;
     }
 
     ///ECP tests:
