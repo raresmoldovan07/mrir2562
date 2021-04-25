@@ -1,2 +1,8 @@
-inventory\service\PartServiceTest.class
+inventory\integration\PartServiceRepoIntegration.class
+inventory\unit\PartServiceTest.class
+inventory\integration\PartServiceIT.class
 inventory\model\InventoryTest.class
+inventory\unit\PartRepositoryTest.class
+inventory\service\PartServiceTest.class
+inventory\unit\MockUtils.class
+inventory\unit\InhousePartTest.class

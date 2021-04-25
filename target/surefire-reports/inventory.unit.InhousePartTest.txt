@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: inventory.model.InventoryTest
+Test set: inventory.unit.InhousePartTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.049 s - in inventory.model.InventoryTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s - in inventory.unit.InhousePartTest

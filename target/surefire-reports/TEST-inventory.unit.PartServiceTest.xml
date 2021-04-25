@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="inventory.model.InventoryTest" time="0.049" tests="7" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="inventory.unit.PartServiceTest" time="0.035" tests="2" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -61,11 +61,6 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="lookupPart_searchItemIsNull" classname="inventory.model.InventoryTest" time="0.018"/>
-  <testcase name="lookupPart_successLoopAll" classname="inventory.model.InventoryTest" time="0.002"/>
-  <testcase name="lookupPart_notFound" classname="inventory.model.InventoryTest" time="0.001"/>
-  <testcase name="lookupPart_successLookupByPartId" classname="inventory.model.InventoryTest" time="0.001"/>
-  <testcase name="lookupPart_searchItemIsEmpty" classname="inventory.model.InventoryTest" time="0"/>
-  <testcase name="lookupPart_successLookupByName" classname="inventory.model.InventoryTest" time="0"/>
-  <testcase name="lookupPart_emptyList" classname="inventory.model.InventoryTest" time="0"/>
+  <testcase name="getAllParts" classname="inventory.unit.PartServiceTest" time="0.033"/>
+  <testcase name="addInhousePart" classname="inventory.unit.PartServiceTest" time="0.002"/>
 </testsuite>
