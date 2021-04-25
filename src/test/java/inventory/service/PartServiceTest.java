@@ -1,7 +1,8 @@
+package inventory.service;
+
 import inventory.model.Inventory;
 import inventory.model.Part;
 import inventory.repository.PartRepository;
-import inventory.service.PartService;
 import inventory.validator.ValidationException;
 import org.junit.jupiter.api.*;
 
@@ -184,7 +185,6 @@ class PartServiceTest {
         assert (ex.getMessage().equals("Inventory level must be greater than 0. "));
     }
 
-    @Disabled
     @Test
     void addOutsourcePart_valid_disabled() {
 

@@ -1,6 +1,5 @@
 package inventory.repository;
 
-
 import inventory.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

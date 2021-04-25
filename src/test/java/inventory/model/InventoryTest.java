@@ -4,7 +4,7 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InventoryTest {
+public class InventoryTest {
 
     private static Inventory inventory;
 
